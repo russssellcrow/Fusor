@@ -28,9 +28,13 @@ WiFiServer server(80);
 const int dataMaxIndex = 1000;
 unsigned long statTime[dataMaxIndex];  // timestamps
 int statData01[dataMaxIndex]; // scintillator
+//int statData02[dataMaxIndex]; // photospectro
 int statData03[dataMaxIndex]; // geiger counter
+//int statData04[dataMaxIndex]; // other
 int data01Pin = 13;           // scintillator
-int data03Pin = 12;           // geiger 
+//int data02Pin;                // photospectro
+int data03Pin = 12;           // geiger
+//int data04Pin;                // other
 int dataIndex = 0;            // index for stat data. changes to zero after client gets data.
 
 // Russell Crow this is your controlls
@@ -271,36 +275,36 @@ String readData(boolean cleanData) {
   if (dataIndex > 0) {
     String exportTime = "[";
     String export01 = "[";
-    String export02 = "[";
+    //String export02 = "[";
     String export03 = "[";
-    String export04 = "[";
+    //String export04 = "[";
     for (int i=0;i<dataIndex;i++) {
       exportTime += String(statTime[i]);
       export01 += String(statData01[i]);
-      export02 += String(statData02[i]);
+      //export02 += String(statData02[i]);
       export03 += String(statData03[i]);
-      export04 += String(statData04[i]);
+      //export04 += String(statData04[i]);
       // prevent last invalid comma bug
       if (i != dataIndex-1) {
         exportTime += ", ";
         export01 += ", ";
-        export02 += ", ";
+        //export02 += ", ";
         export03 += ", ";
-        export04 += ", ";
+        //export04 += ", ";
       }
     }
     // close data array
     exportTime += "]";
     export01 += "]";
-    export02 += "]";
+    //export02 += "]";
     export03 += "]";
-    export04 += "]";
+    //export04 += "]";
     // export to json
     response += "\"statTime: \"" + exportTime +", \n";
     response += "\"stat01: \"" + export01 +", \n";
-    response += "\"stat02: \"" + export02 +", \n";
+    //response += "\"stat02: \"" + export02 +", \n";
     response += "\"stat03: \"" + export03 +", \n";
-    response += "\"stat04: \"" + export04 +" \n";
+    //response += "\"stat04: \"" + export04 +" \n";
   }
 
   response += "}";
@@ -315,9 +319,9 @@ String readData(boolean cleanData) {
 void collectData() {
   statTime[dataIndex] = micros();
   statData01[dataIndex] = analogRead(data01Pin);
-  statData02[dataIndex] = analogRead(data02Pin);
+  //statData02[dataIndex] = analogRead(data02Pin);
   statData03[dataIndex] = analogRead(data03Pin);
-  statData04[dataIndex] = analogRead(data04Pin);
+  //statData04[dataIndex] = analogRead(data04Pin);
   dataIndex++;
   if (dataIndex >= dataMaxIndex) {
     dataIndex = 0;
